@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>API TEST PAGE</title>
+<link href="images/favicon.ico" rel="shortcut icon">
+<link type="text/css" rel="stylesheet" href="css/global.css" />
+<link type="text/css" rel="stylesheet" href="css/main.css" />
+
+<script type="text/javascript" src="js/lib/jquery-core.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+        var host = 'http://bookshop.saritasa.com:4444';
+		
+		function renderJSON(obj) {
+			var keys = [], retValue = "";
+			for (var key in obj) {
+				if (typeof obj[key] === 'object' && obj[key] != null) {
+					retValue += "<div class='tree'>" + key + ": ";
+					retValue += renderJSON(obj[key]);
+					retValue += "</div>";
+				} else {
+					retValue += "<div class='tree'>" + key + ": " + obj[key] + "</div>";
+				}
+				keys.push(key);
+			}
+			return retValue;
+		}
+		var showResult = function(result) {
+			$('#responseContent').empty().append(renderJSON(result.responseJSON));
+		}
+		
+		$('#' + $('#selectBox select').val()).removeClass('hidden');
+		
+		$('#selectBox select').change(function() {
+			$('.request').addClass('hidden');
+			$('#' + $(this).val()).removeClass('hidden');
+			$('#responseContent').empty();
+		});
+				
+		$('#registerForm form').submit(function() {
+			$.ajax({
+				url: host + 'API_LINK',
+				type: 'POST',
+				data: $(this).serialize(),
+				success : function(response, textStatus, data) {
+					showResult(data);
+				},
+				error: function(error) {
+					showResult(error);
+				}
+			});			
+			return false;
+		});
+	});
+</script>
+
+</head>
+<body>
+	<h1>API TEST PAGE</h1>
+	<div id="selectBox">
+		<p>Select an API here:</p>
+		<select>
+			<option value='' selected></option>
+			<option value='registerForm'>UserRegister</option>
+		</select>
+	</div>
+	<div id="content">
+		<div id="requestForm">
+			<h3>Request:</h3>
+			<div id="requestContent">
+				<!--
+					Register form
+				-->
+				<div id="registerForm" class="request hidden">
+					<form>
+						<div class="row">
+							<label>Username <strong>*</strong></label>
+							<input type="text" name="username" value="" />
+						</div>
+						<div class="row">
+							<label>Password <strong>*</strong></label>
+							<input type="password" name="" />
+						</div>
+						<div class="row">
+							<label>&nbsp;</label>
+							<input type="submit" value="Register" class="submitForm" />
+						</div>
+					</form>
+				</div>
+            </div>
+		</div>
+		<div id="responseForm">
+			<h3>Response:</h3>
+			<div id="responseContent">
+			</div>
+		</div>
+	</div>
+</body>
+</html>
