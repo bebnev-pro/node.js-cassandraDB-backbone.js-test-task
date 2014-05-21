@@ -41,10 +41,27 @@ form textarea {
 }
 
 .jsonFile {
-    font-size: 18px;
+    font-size: 10px;
     line-height: 1.5;
     font-family: sans-serif;
     margin: 30px 0;
+}
+.item {
+    border: 1px solid #000;
+    margin: 20px 0;
+    padding: 10px;
+}
+.item_key {
+    font-size: 16px;
+    color: olive;
+    margin: 0;
+    padding: 0;
+}
+.item_value {
+    font-size: 12px;
+    font-style: italic;
+    margin: 0;
+    padding: 0;
 }
 
 .row {
