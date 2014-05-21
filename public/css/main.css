@@ -40,6 +40,13 @@ form textarea {
     text-align: center;
 }
 
+.jsonFile {
+    font-size: 18px;
+    line-height: 1.5;
+    font-family: sans-serif;
+    margin: 30px 0;
+}
+
 .row {
 	overflow: hidden;
 	width: 100%;

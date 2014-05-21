@@ -30,7 +30,7 @@ client.hkeys("hash key", function (err, replies) {
 //routes
 //var routes = require('./routes');
 //var users = require('./routes/user');
-//var base = require('./routes/base');
+var base = require('./routes/base');
 var index = require('./routes/index');
 
 
@@ -47,8 +47,8 @@ app.use(app.router);
 app.use(redis);
 
 app.get('/', index.list);
+app.get('/base', base.data);
 //app.get('/users', users.list);
-//app.get('/base', base.list);
 
 
 

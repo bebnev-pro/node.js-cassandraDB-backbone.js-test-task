@@ -1,7 +1,15 @@
-exports.list = function(req, res){
+exports.data = function(req, res){
+  var fs = require('fs');
+  var file = './temp/pageResources/price.json';
+  fs.readFile(file, 'utf8', function (err, srteam) {
+    if (err) {
+      console.log('Error: ' + err);
 
-  var parsedJSON = require('./temp/pageResources/price.json');
 
-  res.render({parsedJSON:parsedJSON});
-  console.log(parsedJSON);
+    }
+      res.render('base', {parsedJSON:srteam});
+
+
+  });
+
 };
