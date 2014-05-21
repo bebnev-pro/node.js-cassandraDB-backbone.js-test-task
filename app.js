@@ -3,7 +3,6 @@ var http = require('http');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var redis = require('redis'), client = redis.createClient();
 var app = express();
 
 
@@ -29,7 +28,6 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
-app.use(redis);
 
 app.get('/', index.list);
 app.get('/base', base.data);

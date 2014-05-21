@@ -9,7 +9,7 @@
     "express": "~3.4.8",
     "cookie-parser": "~1.0.1",
     "body-parser": "~1.0.0",
-    "redis" : "",
-    "ejs" : ""
+    "ejs" : "",
+    "cassandra-client" : ""
   }
 }
