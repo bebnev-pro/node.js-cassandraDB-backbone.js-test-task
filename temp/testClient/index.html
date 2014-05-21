@@ -10,8 +10,9 @@
 <script type="text/javascript" src="js/lib/jquery-core.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-        var host = 'http://bookshop.saritasa.com:4444';
-		
+
+    var host = prompt("Введите хост");
+    console.log(host);
 		function renderJSON(obj) {
 			var keys = [], retValue = "";
 			for (var key in obj) {
@@ -40,8 +41,7 @@
 				
 		$('#registerForm form').submit(function() {
 			$.ajax({
-//				url: host + 'API_LINK',
-        url: 'pageResources/price.json',
+				url: host + 'API_LINK',
 				type: 'POST',
 				data: $(this).serialize(),
 				success : function(response, textStatus, data) {
