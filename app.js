@@ -13,6 +13,7 @@ var app = express();
 //var routes = require('./routes');
 //var users = require('./routes/user');
 var base = require('./routes/base');
+var addrow = require('./routes/addrow');
 var index = require('./routes/index');
 
 
@@ -29,6 +30,7 @@ app.use(app.router);
 
 app.get('/', index.list);
 app.get('/base', base.data);
+app.get('/addrow', addrow.data);
 //app.get('/users', users.list);
 
 

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>data json</title>
+  <link type="text/css" rel="stylesheet" href="css/global.css" />
+  <link type="text/css" rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+<form action="localhost:3000/addrow" method="get">
+  <input type="text" name="id" value="555"/>
+  <input type="text" name="name" value="имя"/>
+  <input type="text" name="descr" value="описание"/>
+  <input type="text" name="picture" value="img"/>
+  <input type="text" name="price" value="3000"/>
+  <input type="submit"/>
+</form>
+<div class="jsonFile"><%- parsedJSON %></div>
+
+</body>
+</html>
