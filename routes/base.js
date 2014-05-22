@@ -1,7 +1,35 @@
 exports.data = function(req, res){
   var fs = require('fs');
-  var redis = require('redis'), client = redis.createClient();
   var file = './temp/pageResources/price.json';
+
+
+  var Connection = require('cassandra-client').Connection;
+  var con = new Connection({host: 'localhost', port:9160, keyspace:'apitest', user:'', pass:''});
+  con.connect(function(err) { // (err, con)
+    if (err) {
+      console.log('нет связи с базой, ошибка: ' + err);
+      throw err;
+    } else {
+      console.log('соединено успешно');
+
+    con.execute('INSERT INTO books (id, descr, name, picture, price) VALUES (?,?,?,?,?)', [1, 'тест книги', 'тестовая', 123, 999], function(err) {
+      if (err) {
+        console.log('плохо записалось в базу ошибка: ' + err);
+      } else {
+        console.log('хорошо записалось в базу');
+      }
+    });
+
+
+    }
+  });
+
+
+
+
+
+
+
 
 
 
@@ -30,5 +58,8 @@ exports.data = function(req, res){
     res.render('base', {parsedJSON:makeUp});
     }
   });
+
+
+
 
 };

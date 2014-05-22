@@ -9,8 +9,6 @@ var app = express();
 
 
 
-
-
 //routes
 //var routes = require('./routes');
 //var users = require('./routes/user');
