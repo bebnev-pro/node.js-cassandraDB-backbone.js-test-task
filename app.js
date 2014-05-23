@@ -15,7 +15,7 @@ var app = express();
 var base = require('./routes/base');
 var addrow = require('./routes/addrow');
 var index = require('./routes/index');
-
+var addrowBase = require('./routes/addrowBase');
 
 
 
@@ -23,7 +23,7 @@ var index = require('./routes/index');
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
@@ -31,8 +31,9 @@ app.use(app.router);
 app.get('/', index.list);
 app.get('/base', base.data);
 app.get('/addrow', addrow.data);
-//app.get('/users', users.list);
 
+
+app.post('/addrow', addrowBase.data);
 
 
 

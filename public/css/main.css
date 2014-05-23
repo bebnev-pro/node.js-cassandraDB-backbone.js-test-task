@@ -99,7 +99,13 @@ form textarea {
 		font-size: 1.5em;
 		margin-left: 5px;
 	}
-#content {
+    #selectBox a {
+        display: inline-block;
+        font-size: 12px;
+        margin: 0 10px;
+    }
+
+    #content {
 	width: 100%;
 	overflow: hidden;
 	font-size: 1.3em;

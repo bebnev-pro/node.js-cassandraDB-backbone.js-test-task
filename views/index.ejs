@@ -5,7 +5,6 @@
 <title>API TEST PAGE</title>
 <link type="text/css" rel="stylesheet" href="css/global.css" />
 <link type="text/css" rel="stylesheet" href="css/main.css" />
-
 <script type="text/javascript" src="js/lib/jquery-core.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -38,7 +37,7 @@
 				
 		$('#registerForm form').submit(function() {
 			$.ajax({
-				url: host + 'API_LINK',
+				url: host + '/action',
 				type: 'POST',
 				data: $(this).serialize(),
 				success : function(response, textStatus, data) {
@@ -63,16 +62,9 @@
 			<option value='' selected></option>
 			<option value='registerForm'>UserRegister</option>
 		</select>
+    <a href="/base">Прочитать всю базу</a>
+    <a href="/addrow">Дописать строку в базу</a>
 	</div>
-  <p><a href="/base">View base</a></p>
-  <form action="localhost:3000/addrow" method="get">
-    <input type="text" name="id" value="555"/>
-    <input type="text" name="name" value="имя"/>
-    <input type="text" name="descr" value="описание"/>
-    <input type="text" name="picture" value="img"/>
-    <input type="text" name="price" value="3000"/>
-    <input type="submit"/>
-  </form>
 	<div id="content">
 		<div id="requestForm">
 			<h3>Request:</h3>
@@ -84,7 +76,7 @@
 					<form>
 						<div class="row">
 							<label>Username <strong>*</strong></label>
-							<input type="text" name="username" value="" />
+							<input type="text" name="name" value="" />
 						</div>
 						<div class="row">
 							<label>Password <strong>*</strong></label>

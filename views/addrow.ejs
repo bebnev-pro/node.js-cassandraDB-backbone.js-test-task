@@ -2,12 +2,13 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>data json</title>
+  <title>Заполните форму чтобы дописать строчку в базу</title>
   <link type="text/css" rel="stylesheet" href="css/global.css" />
   <link type="text/css" rel="stylesheet" href="css/main.css" />
 </head>
 <body>
-<form action="localhost:3000/addrow" method="get">
+<h2>Заполните форму чтобы дописать строчку в базу</h2>
+<form action="/addrow" method="post">
   <input type="text" name="id" value="555"/>
   <input type="text" name="name" value="имя"/>
   <input type="text" name="descr" value="описание"/>
