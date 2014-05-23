@@ -16,6 +16,7 @@ var base = require('./routes/base');
 var addrow = require('./routes/addrow');
 var index = require('./routes/index');
 var addrowBase = require('./routes/addrowBase');
+var read = require('./routes/read');
 
 
 
@@ -31,6 +32,7 @@ app.use(app.router);
 app.get('/', index.list);
 app.get('/base', base.data);
 app.get('/addrow', addrow.data);
+app.get('/read', read.data);
 
 
 app.post('/addrow', addrowBase.data);

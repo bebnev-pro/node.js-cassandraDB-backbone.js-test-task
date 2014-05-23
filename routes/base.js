@@ -1,9 +1,11 @@
 exports.data = function(req, res){
   var fs = require('fs');
   var file = './temp/pageResources/price.json';
-
   var Connection = require('cassandra-client').Connection;
   var con = new Connection({host: 'localhost', port:9160, keyspace:'apitest', user:'', pass:''});
+
+
+
   con.connect(function(err) { // (err, con)
     if (err) {
       console.log('нет связи с базой, ошибка: ' + err);
@@ -28,18 +30,6 @@ exports.data = function(req, res){
           });
           res.render('base', {parsedJSON: 'файл записан в базу'});
 
-
-//          con.execute('SELECT ? FROM books WHERE name=?', [1,''], function(err) {
-//            if (err) {
-//              console.log('плохо прочиталось с базы ошибка: ' + err);
-//              res.render('base', {parsedJSON: 'плохо прочиталось с базы ошибка: ' + err});
-//            } else {
-//              console.log('прочиталось с базы хрошо');
-//              res.render('base', {parsedJSON: 'прочиталось с базы хорошо'});
-//            }
-//          });
-
-
         }
       });
 
@@ -53,14 +43,3 @@ exports.data = function(req, res){
 
 
 };
-
-
-//            for(var key in item) {
-
-//              if (key == 'picture') {
-//                makeUp += '<h2 class="item_key">' + key +'</h2><p><img alt="picture" src="' + item[key] + '"/></p>';
-//              } else {
-//                makeUp += '<h2 class="item_key">' + key +'</h2><p class="item_value">' + item[key] + '</p>';
-//              }
-
-//            }
