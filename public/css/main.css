@@ -46,6 +46,11 @@ form textarea {
     font-family: sans-serif;
     margin: 30px 0;
 }
+.jsonFile a {
+    color: olive;
+    font-size: 120%;
+    line-height: 1.5;
+}
 .item {
     border: 1px solid #000;
     margin: 20px 0;

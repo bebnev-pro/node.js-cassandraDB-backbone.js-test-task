@@ -7,9 +7,7 @@
   <link type="text/css" rel="stylesheet" href="css/main.css" />
 </head>
 <body>
-<h2>Вот данные с базы:</h2>
-<h2> Всего <%- counter %> записей.</h2>
 <div class="jsonFile"><%- parsedJSON %></div>
-
+<a href="/deleteBook?book=<%= bookNum %>">Удалить книгу?</a>
 </body>
 </html>

@@ -11,6 +11,8 @@ var addrow = require('./routes/addrow');
 var index = require('./routes/index');
 var addrowBase = require('./routes/addrowBase');
 var read = require('./routes/read');
+var getBook = require('./routes/getBook');
+var deleteBook = require('./routes/deleteBook');
 
 // view engine setup
 app.set('view engine', 'ejs');
@@ -25,6 +27,8 @@ app.get('/', index.list);
 app.get('/base', base.data);
 app.get('/addrow', addrow.data);
 app.get('/read', read.data);
+app.get('/getbook', getBook.data);
+app.get('/deleteBook', deleteBook.data);
 
 app.post('/addrow', addrowBase.data);
 
