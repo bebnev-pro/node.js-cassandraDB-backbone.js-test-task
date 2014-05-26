@@ -5,20 +5,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var app = express();
 
-
-
-
-
 //routes
-//var routes = require('./routes');
-//var users = require('./routes/user');
 var base = require('./routes/base');
 var addrow = require('./routes/addrow');
 var index = require('./routes/index');
 var addrowBase = require('./routes/addrowBase');
 var read = require('./routes/read');
-
-
 
 // view engine setup
 app.set('view engine', 'ejs');
@@ -34,13 +26,7 @@ app.get('/base', base.data);
 app.get('/addrow', addrow.data);
 app.get('/read', read.data);
 
-
 app.post('/addrow', addrowBase.data);
-
-
-
-
-
 
 
 /// catch 404 and forwarding to error handler
