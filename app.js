@@ -1,6 +1,5 @@
 var express = require('express');
 
-
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
@@ -10,9 +9,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var app = express();
 
-
 // auth
-
 passport.use('local', new LocalStrategy(
   function (username, password, done) {
     console.log(username, password);
@@ -36,6 +33,10 @@ passport.deserializeUser(function (data, done) {
     done(err)
   }
 });
+function ensureAuth(req, res, next) {
+  if (req.isAuthenticated()) {return next();}
+  res.redirect('/login')
+}
 
 //routes
 var base = require('./routes/base');
@@ -59,29 +60,26 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
 
-
 app.get('/', index.list);
-app.get('/base', base.data);
-app.get('/addrow', addrow.data);
-
+app.get('/base', ensureAuth, base.data);
+app.get('/addrow', ensureAuth, addrow.data);
+app.get('/read', ensureAuth, read.data);
+app.get('/getbook', ensureAuth, getBook.data);
+app.get('/deleteBook', ensureAuth, deleteBook.data);
+app.get('/logout', function(req, res){
+  req.logOut();
+  res.redirect('/');
+});
 app.get('/login', function (req, res) {
-
   if (req.isAuthenticated()) {
-    res.redirect('/addrow');
+    res.redirect('/');
     return;
   }
-
   res.render('login');
 });
 
-
-app.get('/read', read.data);
-app.get('/getbook', getBook.data);
-app.get('/deleteBook', deleteBook.data);
-
-
 app.post('/addrow', addrowBase.data);
-app.post('/login', passport.authenticate('local', { successRedirect: '/addrow',
+app.post('/login', passport.authenticate('local', { successRedirect: '/',
   failureRedirect: '/login' }));
 
 /// catch 404 and forwarding to error handler
