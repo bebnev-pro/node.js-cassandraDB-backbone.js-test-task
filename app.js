@@ -1,9 +1,41 @@
 var express = require('express');
+
+
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 var http = require('http');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var app = express();
+
+
+// auth
+
+passport.use('local', new LocalStrategy(
+  function (username, password, done) {
+    console.log(username, password);
+    if (username == "admin" && password == "admin") {
+      return done(null, {
+        username: "admin"
+      });
+    }
+    return done(null, false, {
+      message: 'Неверный логин или пароль'
+    });
+  }
+));
+passport.serializeUser(function (user, done) {
+  done(null, JSON.stringify(user));
+});
+passport.deserializeUser(function (data, done) {
+  try {
+    done(null, JSON.parse(data));
+  } catch (e) {
+    done(err)
+  }
+});
 
 //routes
 var base = require('./routes/base');
@@ -13,25 +45,44 @@ var addrowBase = require('./routes/addrowBase');
 var read = require('./routes/read');
 var getBook = require('./routes/getBook');
 var deleteBook = require('./routes/deleteBook');
+var login = require('./routes/login');
 
 // view engine setup
 app.set('view engine', 'ejs');
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.session({ secret: 'admin' }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(app.router);
+
 
 app.get('/', index.list);
 app.get('/base', base.data);
 app.get('/addrow', addrow.data);
+
+app.get('/login', function (req, res) {
+
+  if (req.isAuthenticated()) {
+    res.redirect('/addrow');
+    return;
+  }
+
+  res.render('login');
+});
+
+
 app.get('/read', read.data);
 app.get('/getbook', getBook.data);
 app.get('/deleteBook', deleteBook.data);
 
-app.post('/addrow', addrowBase.data);
 
+app.post('/addrow', addrowBase.data);
+app.post('/login', passport.authenticate('local', { successRedirect: '/addrow',
+  failureRedirect: '/login' }));
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

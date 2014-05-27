@@ -2,13 +2,17 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>error</title>
+  <title>data json</title>
   <link type="text/css" rel="stylesheet" href="css/global.css" />
   <link type="text/css" rel="stylesheet" href="css/main.css" />
 </head>
 <body>
-<h1>error</h1>
-<div><%= message %></div>
-<div><%= error %></div>
+
+<form action="/login" method="post">
+  <input type="text" placeholder="admin" name="username"/>
+  <input type="password" placeholder="admin" name="password"/>
+  <input type="submit" value="вход"/>
+</form>
+
 </body>
 </html>
