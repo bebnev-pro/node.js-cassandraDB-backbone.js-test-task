@@ -23,7 +23,7 @@ exports.data = function(req, res){
             }
           });
       });
-      res.render('base', {parsedJSON: 'файл записан в базу'});
+      res.redirect('../read');
     }
   });
 
