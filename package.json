@@ -10,6 +10,9 @@
     "cookie-parser": "~1.0.1",
     "body-parser": "~1.0.0",
     "ejs" : "",
-    "node-cassandra-cql" : ""
+    "node-cassandra-cql" : "",
+    "passport" : "",
+    "passport-local" : "",
+    "connect-flash" : ""
   }
 }
