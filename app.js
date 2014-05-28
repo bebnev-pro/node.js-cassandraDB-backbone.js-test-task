@@ -47,6 +47,7 @@ var read = require('./routes/read');
 var getBook = require('./routes/getBook');
 var deleteBook = require('./routes/deleteBook');
 var login = require('./routes/login');
+var page = require('./routes/page');
 
 // view engine setup
 app.set('view engine', 'ejs');
@@ -61,6 +62,7 @@ app.use(passport.session());
 app.use(app.router);
 
 app.get('/', index.list);
+app.get('/page', page.data);
 app.get('/base', ensureAuth, base.data);
 app.get('/addrow', ensureAuth, addrow.data);
 app.get('/read', ensureAuth, read.data);
