@@ -1,3 +1,3 @@
 exports.data = function(req, res) {
-  res.render('page');
+  res.end('/views/page.ejs');
 };

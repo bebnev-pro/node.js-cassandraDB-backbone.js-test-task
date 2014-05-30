@@ -52,7 +52,7 @@ var page = require('./routes/page');
 // view engine setup
 app.set('view engine', 'ejs');
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/', express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser());
 app.use(cookieParser());

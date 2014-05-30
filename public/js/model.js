@@ -1,14 +1,10 @@
 var Row = Backbone.Model.extend({
   defaults:{
-    
-
-  },
-  validate: function(attrs) {
-    if(attrs.valid == true) {
-      alert('Вы ввели недопустимые символы. Возможен ввод только действительных чисел.');
-      return('Incorrect');
-    }
-
+    id : 1,
+    descr : "Пример - описание",
+    name : "Пример",
+    picture : "http://akak.ru/steps/pictures/000/027/890_large.jpg",
+    price : "10"
   }
 });
 var RowsCollection = Backbone.Collection.extend({
