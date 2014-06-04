@@ -48,6 +48,7 @@ var getBook = require('./routes/getBook');
 var deleteBook = require('./routes/deleteBook');
 var login = require('./routes/login');
 var page = require('./routes/page');
+var model = require('./routes/model');
 
 // view engine setup
 app.set('view engine', 'ejs');
@@ -68,6 +69,7 @@ app.get('/addrow', ensureAuth, addrow.data);
 app.get('/read', ensureAuth, read.data);
 app.get('/getbook', ensureAuth, getBook.data);
 app.get('/deleteBook', ensureAuth, deleteBook.data);
+app.get('/model', model.data);
 app.get('/logout', function(req, res){
   req.logOut();
   res.redirect('/');

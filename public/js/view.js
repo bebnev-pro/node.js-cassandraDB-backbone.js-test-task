@@ -16,7 +16,8 @@ var ItemView = Backbone.View.extend({
   tagName: 'div',
   className: 'col-lg-4 panel panel-info',
   events: {
-    "click .btn-danger" : "destroy"
+    "click .btn-danger" : "destroy",
+    "click .btn-info" : "upload"
   },
   initialize: function() {
     this.template = _.template($('#viewItem').html());
@@ -30,5 +31,9 @@ var ItemView = Backbone.View.extend({
   },
   destroy: function() {
     this.remove();
+  },
+  upload: function() {
+    this.model.fetch();
+    this.render();
   }
 });
