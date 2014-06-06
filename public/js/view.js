@@ -4,11 +4,16 @@ var Start = Backbone.View.extend({
     "click .btn-primary" : "addObject"
   },
   initialize: function() {
-
+    this.collection = new RowsCollection();
+    this.collection.fetch();
+    this.listenTo(this.collection, 'add', this.addOne);
   },
   addObject: function() {
-    var view = new ItemView();
-    this.$('.row').prepend(view.render());
+    this.collection.add({});
+  },
+  addOne: function(model) {
+    var view = new ItemView({model:model});
+    this.$('.row').append(view.render());
   }
 });
 
@@ -17,13 +22,13 @@ var ItemView = Backbone.View.extend({
   className: 'col-lg-4 panel panel-info',
   events: {
     "click .btn-danger" : "destroy",
-    "click .btn-info" : "upload"
+    "click .btn-info" : "sendNew"
   },
   initialize: function() {
     this.template = _.template($('#viewItem').html());
-    this.model = new Row();
   },
   render: function() {
+    if (!this.model.attributes.id) {this.model.set({id:false})};
     var dataJson = this.model.toJSON();
     var makeUp = this.template(dataJson);
     this.$el.html(makeUp);
@@ -32,8 +37,12 @@ var ItemView = Backbone.View.extend({
   destroy: function() {
     this.remove();
   },
-  upload: function() {
-    this.model.fetch();
-    this.render();
+  sendNew: function() {
+    var that = this;
+    this.model.fetch({
+      success: function() {
+        that.render();
+      }
+    });
   }
 });

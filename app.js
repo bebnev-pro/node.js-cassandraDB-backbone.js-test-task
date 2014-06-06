@@ -66,10 +66,10 @@ app.get('/', index.list);
 app.get('/page', page.data);
 app.get('/base', ensureAuth, base.data);
 app.get('/addrow', ensureAuth, addrow.data);
-app.get('/read', ensureAuth, read.data);
+app.get('/read', read.data);
 app.get('/getbook', ensureAuth, getBook.data);
 app.get('/deleteBook', ensureAuth, deleteBook.data);
-app.get('/model', model.data);
+//app.get('/model/:id?', model.data);
 app.get('/logout', function(req, res){
   req.logOut();
   res.redirect('/');
