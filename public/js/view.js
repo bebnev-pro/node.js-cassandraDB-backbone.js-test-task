@@ -1,7 +1,7 @@
 var Start = Backbone.View.extend({
   el: 'body',
   events: {
-    "click .btn-primary" : "addObject"
+    "click .addItem" : "addObject"
   },
   initialize: function() {
     this.collection = new RowsCollection();
@@ -9,7 +9,8 @@ var Start = Backbone.View.extend({
     this.listenTo(this.collection, 'add', this.addOne);
   },
   addObject: function() {
-    this.collection.add({});
+    var view = new AddItemView({collection:this.collection});
+    this.$el.append(view.render());
   },
   addOne: function(model) {
     var view = new ItemView({model:model});
@@ -35,6 +36,7 @@ var ItemView = Backbone.View.extend({
     return this.$el;
   },
   destroy: function() {
+    this.model.destroy();
     this.remove();
   },
   sendNew: function() {
@@ -44,5 +46,33 @@ var ItemView = Backbone.View.extend({
         that.render();
       }
     });
+  }
+});
+
+var AddItemView = Backbone.View.extend({
+  tagName: 'div',
+  className: 'fog',
+  events: {
+    "click .close" : "destroy",
+    "click .btn-close" : "destroy",
+    "click .btn-primary" : "sendModel"
+  },
+  initialize: function() {
+    this.template = _.template($('#popupAddModel').html());
+  },
+  render: function() {
+
+    if (!this.model.attributes.id) {this.model.set({id:false})};
+    var dataJson = this.model.toJSON();
+    var makeUp = this.template(dataJson);
+    this.$el.html(makeUp);
+    return this.$el;
+
+  },
+  destroy: function () {
+    this.remove();
+  },
+  sendModel: function() {
+    this.remove();
   }
 });

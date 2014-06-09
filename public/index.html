@@ -19,17 +19,62 @@
     <p><a class="btn btn-danger btn-sm" href="#" role="button">Удалить</a></p>
   </script>
 
+  <script id="popupAddModel" type="text/template">
+
+      <div class="addedItem">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="">Заполните формочку</h3>
+        </div>
+        <form class="form-horizontal modal-body">
+          <!--<div class="form-group">-->
+            <!--<label class="col-sm-4 control-label" for="idItem">id</label>-->
+            <!--<div class="col-sm-6">-->
+              <!--<input type="text" name="idItem" class="form-control" id="idItem" value="<%= id %>"/>-->
+            <!--</div>-->
+          <!--</div>-->
+          <div class="form-group">
+            <label class="col-sm-4 control-label" for="nameOfItem">Название</label>
+            <div class="col-sm-6">
+              <input type="text" name="nameOfItem" class="form-control" id="nameOfItem" value="<%= name %>"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label" for="subscr">Описание</label>
+            <div class="col-sm-6">
+              <textarea name="subscr" class="form-control" id="subscr"><%= descr %></textarea>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-4 control-label" for="price">Цена</label>
+            <div class="col-sm-6">
+              <input type="text" name="price" class="form-control" id="price" value="<%= price %>"/>
+            </div>
+          </div>
+        </form>
+        <div class="modal-footer">
+          <button class="btn btn-close" data-dismiss="modal" aria-hidden="true">Закрыть</button>
+          <button class="btn btn-primary">Сохранить книгу</button>
+        </div>
+      </div>
+
+  </script>
+
   <script type="text/javascript" src="/js/model.js"></script>
   <script type="text/javascript" src="/js/view.js"></script>
   <script type="text/javascript" src="/js/common.js"></script>
 </head>
 <body>
+
+
+
+
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li><a href="#about">Каталог</a></li>
         <li><a href="#">Записать json</a></li>
+        <li><a href="#" class="addItem">Добавить запись</a></li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
@@ -37,11 +82,7 @@
 
 <div class="container theme-showcase">
 
-  <div class="jumbotron">
-    <h1>Test API</h1>
-    <p>Чтобы записать первоначальные значения в базу - нажмите кнопку "Записать json"</p>
-    <p><a href="#" class="btn btn-primary btn-lg" role="button">Записать json</a></p>
-  </div>
+
 
   <a href="#" class="btn btn-primary btn-lg" role="button">Добавить</a>
   <div class="row"></div>
