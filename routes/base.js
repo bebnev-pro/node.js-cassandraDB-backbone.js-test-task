@@ -12,7 +12,7 @@ exports.data = function(req, res){
 
       var templateData = JSON.parse(stream);
       templateData.forEach(function (item) {
-        client.execute('INSERT INTO books (id, descr, name, picture, price) VALUES (?,?,?,?,?)', [item.id, item.desc, item.name, item.picture, item.price], consistency,
+        client.execute('INSERT INTO books (id, descr, name, picture, price) VALUES (blobAsUuid(timeuuidAsBlob(now())), ?,?,?,?)', [item.desc, item.name, item.picture, item.price], consistency,
           function (err, result) {
             if (err) {
               console.log('плохо записалось в базу ошибка: ' + err);
@@ -23,7 +23,7 @@ exports.data = function(req, res){
             }
           });
       });
-      res.redirect('../read');
+      res.redirect('/');
     }
   });
 

@@ -66,7 +66,7 @@ app.use(app.router);
 
 app.get('/', index.list);
 app.get('/page', page.data);
-app.get('/base', ensureAuth, base.data);
+app.get('/base', base.data);
 app.get('/addrow', ensureAuth, addrow.data);
 app.get('/read', read.data);
 app.put('/read/:id', read.write);

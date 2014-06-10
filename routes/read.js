@@ -21,14 +21,14 @@ exports.write = function(req, res) {
   var client = new cql.Client({hosts: ['127.0.0.1'], keyspace: 'apitest', username: 'cassandra', password: 'cassandra'});
   var consistency = cql.types.consistencies.one;
 
-  client.execute('INSERT INTO books (id, descr, name, picture, price) VALUES (?,?,?,?,?)', [+req.params.id, req.body.descr, req.body.name, req.body.picture, +req.body.price], consistency,
+  client.execute('INSERT INTO books (id, descr, name, picture, price) VALUES (?,?,?,?,?)', [req.body.id, req.body.descr, req.body.name, req.body.picture, +req.body.price], consistency,
     function(err) {
       if (err) {
         console.log('плохо записалось в базу ошибка: ' + err);
         res.send('плохо записалось в базу ошибка: ' + err);
       } else {
-        res.send('строка с ключом ' + req.body.id + ' записана успешно');
-        console.log('строка с ключом ' + req.body.id + ' записана успешно');
+        console.log('книжка создана с номером: ' + req.body.id);
+        res.redirect('/');
       }
     });
 }
@@ -38,7 +38,7 @@ exports.delete = function(req, res) {
   var client = new cql.Client({hosts: ['127.0.0.1'], keyspace: 'apitest', username: 'cassandra', password: 'cassandra'});
   var consistency = cql.types.consistencies.one;
 
-  client.execute('DELETE FROM books WHERE id = ?;', [+req.params.id], consistency,
+  client.execute('DELETE FROM books WHERE id = ?;', [req.params.id], consistency,
     function(err) {
       if (err) {
         console.log('execute failed' + err);
