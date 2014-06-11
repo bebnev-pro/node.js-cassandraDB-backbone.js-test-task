@@ -34,8 +34,12 @@ passport.deserializeUser(function (data, done) {
   }
 });
 function ensureAuth(req, res, next) {
-  if (req.isAuthenticated()) {return next();}
-  res.redirect('/login')
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    console.log('результат аутентификации ' + req.isAuthenticated());
+    res.render('login');
+  }
 }
 
 //routes
@@ -64,32 +68,37 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
 
-app.get('/', index.list);
+app.get('/', ensureAuth, index.list);
 app.get('/page', page.data);
 app.get('/base', base.data);
 app.get('/addrow', ensureAuth, addrow.data);
-app.get('/read', read.data);
-app.put('/read/:id', read.write);
-app.delete('/read/:id', read.delete);
+
+
+
+app.get('/read', ensureAuth, read.data);
+app.put('/read/:id', ensureAuth, read.write);
+app.delete('/read/:id', ensureAuth, read.delete);
 
 app.get('/getbook', ensureAuth, getBook.data);
 app.get('/deleteBook', ensureAuth, deleteBook.data);
-//app.get('/model/:id?', model.data);
 app.get('/logout', function(req, res){
   req.logOut();
   res.redirect('/');
 });
+
 app.get('/login', function (req, res) {
   if (req.isAuthenticated()) {
     res.redirect('/');
     return;
+  } else {
+    res.render('login');
   }
-  res.render('login');
 });
-
-app.post('/addrow', addrowBase.data);
 app.post('/login', passport.authenticate('local', { successRedirect: '/',
   failureRedirect: '/login' }));
+
+app.post('/addrow', addrowBase.data);
+
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
