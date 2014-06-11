@@ -7,8 +7,6 @@ var Start = Backbone.View.extend({
     this.collection = new RowsCollection();
     this.collection.fetch();
     this.listenTo(this.collection, 'add', this.addOne);
-    this.listenTo(this.collection, 'add', this.addOne);
-
   },
   addObject: function() {
     var view = new AddItemView({collection:this.collection});
@@ -21,15 +19,18 @@ var Start = Backbone.View.extend({
   }
 });
 
+
 var ItemView = Backbone.View.extend({
   tagName: 'div',
   className: 'col-lg-4 panel panel-info',
   events: {
     "click .btn-danger" : "destroy",
-    "click .btn-info" : "sendNew"
+    "click .btn-info" : "edit"
   },
   initialize: function() {
     this.template = _.template($('#viewItem').html());
+    this.listenTo(this.model, 'change', this.render);
+    this.listenTo(this.model, 'destroy', this.remove);
   },
   render: function() {
     var dataJson = this.model.toJSON();
@@ -41,19 +42,15 @@ var ItemView = Backbone.View.extend({
     this.model.destroy();
     this.remove();
   },
-  sendNew: function() {
-    var that = this;
-    this.model.fetch({
-      success: function() {
-        that.render();
-      }
-    });
+  edit: function() {
+    var view = new AddItemView({model:this.model});
+    this.$el.append(view.render());
   }
 });
 
+
 var AddItemView = Backbone.View.extend({
   tagName: 'div',
-  className: 'fog',
   events: {
     "click .close" : "destroy",
     "click .btn-close" : "destroy",
@@ -61,21 +58,21 @@ var AddItemView = Backbone.View.extend({
   },
   initialize: function() {
     this.template = _.template($('#popupAddModel').html());
-
-    var s = [];
-    var hexDigits = "0123456789abcdef";
-    for (var i = 0; i < 36; i++) {
-      s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    if (!this.model) {
+      var s = [];
+      var hexDigits = "0123456789abcdef";
+      for (var i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+      }
+      s[14] = "4";
+      s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+      s[8] = s[13] = s[18] = s[23] = "-";
+      var uuid = s.join("");
+      this.model = new Row({id: uuid});
     }
-    s[14] = "4";
-    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
-    s[8] = s[13] = s[18] = s[23] = "-";
-
-    var uuid = s.join("");
-
-    this.model = new Row({id: uuid});
-    this.collection.add(this.model, {silent: true});
-    console.log(this.model);
+    if (this.collection) {
+    this.collection.add(this.model);
+    }
   },
   render: function() {
     var dataJson = this.model.toJSON();
@@ -84,13 +81,26 @@ var AddItemView = Backbone.View.extend({
     return this.$el;
   },
   destroy: function () {
+    if (this.collection) {
     this.model.destroy();
+    }
     this.remove();
-    this.collection.fetch();
   },
   sendModel: function() {
+    var nameOfItem = this.$el.find('#nameOfItem').val();
+    var subscr = this.$el.find('#subscr').val();
+    var price = this.$el.find('#price').val();
+    var picture = this.$el.find('#imgItem').val();
+    this.model.set({
+      name: nameOfItem,
+      descr: subscr,
+      price: price,
+      picture: picture
+    });
+    if (this.collection) {
     this.collection.create(this.model);
+    }
+    this.model.save();
     this.remove();
-
   }
 });
