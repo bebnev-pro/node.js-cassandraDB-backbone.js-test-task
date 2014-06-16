@@ -1,3 +1,4 @@
+var fs = require('fs');
 var express = require('express');
 
 var passport = require('passport');
@@ -68,12 +69,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
 
-app.get('/', ensureAuth, index.list);
+app.get('/', ensureAuth, function(req, res) {
+  res.set('Content-Type', 'text/html', 'utf8');
+  var file = fs.readFileSync('public/inde.html', 'utf8');
+  res.send(file);
+});
 app.get('/page', page.data);
 app.get('/base', base.data);
 app.get('/addrow', ensureAuth, addrow.data);
-
-
 
 app.get('/read', ensureAuth, read.data);
 app.put('/read/:id', ensureAuth, read.write);
