@@ -1,5 +1,10 @@
 exports.data = function(req, res) {
 
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
   var cql = require('node-cassandra-cql');
   var client = new cql.Client({hosts: ['127.0.0.1'], keyspace: 'apitest', username: 'cassandra', password: 'cassandra'});
   var consistency = cql.types.consistencies.one;
@@ -13,7 +18,6 @@ exports.data = function(req, res) {
       }
     }
   );
-
 }
 exports.write = function(req, res) {
 

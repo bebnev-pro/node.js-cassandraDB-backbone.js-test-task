@@ -10,6 +10,39 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var app = express();
 
+
+
+
+
+
+
+//routes
+var base = require('./routes/base');
+var addrow = require('./routes/addrow');
+var index = require('./routes/index');
+var addrowBase = require('./routes/addrowBase');
+var getBook = require('./routes/getBook');
+var deleteBook = require('./routes/deleteBook');
+var login = require('./routes/login');
+var page = require('./routes/page');
+var model = require('./routes/model');
+var read = require('./routes/read');
+//restfull
+
+// view engine setup
+app.set('view engine', 'ejs');
+
+app.use('/', express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser());
+app.use(cookieParser());
+app.use(express.session({ secret: 'admin' }));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(app.router);
+
+
+
 // auth
 passport.use('local', new LocalStrategy(
   function (username, password, done) {
@@ -34,7 +67,13 @@ passport.deserializeUser(function (data, done) {
     done(err)
   }
 });
+
 function ensureAuth(req, res, next) {
+//  res.setHeader('Access-Control-Allow-Origin', '*');
+//  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+//  res.setHeader('Access-Control-Allow-Credentials', true);
+
   if (req.isAuthenticated()) {
     return next();
   } else {
@@ -43,34 +82,14 @@ function ensureAuth(req, res, next) {
   }
 }
 
-//routes
-var base = require('./routes/base');
-var addrow = require('./routes/addrow');
-var index = require('./routes/index');
-var addrowBase = require('./routes/addrowBase');
-var getBook = require('./routes/getBook');
-var deleteBook = require('./routes/deleteBook');
-var login = require('./routes/login');
-var page = require('./routes/page');
-var model = require('./routes/model');
-var read = require('./routes/read');
 
-//restfull
 
-// view engine setup
-app.set('view engine', 'ejs');
 
-app.use('/', express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
-app.use(bodyParser());
-app.use(cookieParser());
-app.use(express.session({ secret: 'admin' }));
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(app.router);
 
 app.get('/', ensureAuth, function(req, res) {
-  res.set('Content-Type', 'text/html', 'utf8');
+  res.set({
+    'Content-Type': 'text/html; charset=utf8'
+  });
   var file = fs.readFileSync('public/inde.html', 'utf8');
   res.send(file);
 });
@@ -79,6 +98,20 @@ app.get('/base', base.data);
 app.get('/addrow', ensureAuth, addrow.data);
 
 app.get('/read', ensureAuth, read.data);
+
+
+app.post('/API_LINK',
+  passport.authenticate('local'),
+  function(req, res) {
+//    res.setHeader('Access-Control-Allow-Origin', '*');
+//    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+//    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.send('ok');
+  }
+);
+
+
 app.put('/read/:id', ensureAuth, read.write);
 app.delete('/read/:id', ensureAuth, read.delete);
 
@@ -97,11 +130,11 @@ app.get('/login', function (req, res) {
     res.render('login');
   }
 });
+
 app.post('/login', passport.authenticate('local', { successRedirect: '/',
   failureRedirect: '/login' }));
 
 app.post('/addrow', addrowBase.data);
-
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {

@@ -10,9 +10,6 @@
 <script type="text/javascript" src="js/lib/jquery-core.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-
-    var host = prompt("Введите хост");
-    console.log(host);
 		function renderJSON(obj) {
 			var keys = [], retValue = "";
 			for (var key in obj) {
@@ -41,7 +38,7 @@
 				
 		$('#registerForm form').submit(function() {
 			$.ajax({
-				url: host + 'API_LINK',
+				url: 'http://localhost:3000/API_LINK',
 				type: 'POST',
 				data: $(this).serialize(),
 				success : function(response, textStatus, data) {
@@ -50,7 +47,7 @@
 				error: function(error) {
 					showResult(error);
 				}
-			});			
+			});
 			return false;
 		});
 	});
