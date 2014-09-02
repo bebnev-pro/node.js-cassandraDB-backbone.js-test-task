@@ -10,12 +10,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var app = express();
 
-
-
-
-
-
-
 //routes
 var base = require('./routes/base');
 var addrow = require('./routes/addrow');
@@ -41,9 +35,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
 
-
-
-// auth
 passport.use('local', new LocalStrategy(
   function (username, password, done) {
     console.log(username, password);
@@ -69,11 +60,6 @@ passport.deserializeUser(function (data, done) {
 });
 
 function ensureAuth(req, res, next) {
-//  res.setHeader('Access-Control-Allow-Origin', '*');
-//  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-//  res.setHeader('Access-Control-Allow-Credentials', true);
-
   if (req.isAuthenticated()) {
     return next();
   } else {
@@ -81,10 +67,6 @@ function ensureAuth(req, res, next) {
     res.render('login');
   }
 }
-
-
-
-
 
 app.get('/', ensureAuth, function(req, res) {
   res.set({
@@ -99,18 +81,37 @@ app.get('/addrow', ensureAuth, addrow.data);
 
 app.get('/read', ensureAuth, read.data);
 
-
 app.post('/API_LINK',
-  passport.authenticate('local'),
-  function(req, res) {
-//    res.setHeader('Access-Control-Allow-Origin', '*');
-//    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-//    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.send('ok');
+  function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    passport.authenticate('local', function(err, username, info) {
+
+      console.log('err: '+err+'; username: '+username+'; info: '+info+';');
+
+      if (err) {
+        console.log('ошибочка ' + err);
+        return next(err);
+      }
+      if (!req.body.username) {
+        console.log('не юзер');
+        return res.send('не юзер');
+      }
+      req.logIn(req.body.username, function(err) {
+        if (err) {
+          console.log('ошибочка2 ' + err);
+          return next(err);
+        }
+        console.log(' все путем!');
+        return res.send(' все путем!');
+      });
+    })(req, res, next);
+
   }
 );
-
 
 app.put('/read/:id', ensureAuth, read.write);
 app.delete('/read/:id', ensureAuth, read.delete);
