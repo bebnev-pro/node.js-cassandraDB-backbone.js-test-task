@@ -6,13 +6,14 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "express": "~3.4.8",
-    "cookie-parser": "~1.0.1",
     "body-parser": "~1.0.0",
-    "ejs" : "*",
-    "node-cassandra-cql" : "*",
-    "passport" : "*",
-    "passport-local" : "*",
-    "connect-flash" : "*"
+    "connect-flash": "*",
+    "cookie-parser": "~1.0.1",
+    "ejs": "*",
+    "express": "~3.4.8",
+    "node-cassandra-cql": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "sqlite3": "^5.0.2"
   }
 }

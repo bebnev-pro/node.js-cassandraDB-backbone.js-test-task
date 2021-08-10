@@ -10,6 +10,17 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var app = express();
 
+// creating DB
+const sqlite3 = require('sqlite3').verbose();
+let db = new sqlite3.Database('./bin/sample.db', (err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log('Connected to SQlite database.');
+});
+db.run('CREATE TABLE IF NOT EXISTS books(primary_key INTEGER PRIMARY KEY, Descr string NULL, Name string NULL, Picture string NULL, Price number NULL);');
+db.close();
+
 //routes
 var base = require('./routes/base');
 var addrow = require('./routes/addrow');
@@ -19,7 +30,6 @@ var getBook = require('./routes/getBook');
 var deleteBook = require('./routes/deleteBook');
 var login = require('./routes/login');
 var page = require('./routes/page');
-var model = require('./routes/model');
 var read = require('./routes/read');
 //restfull
 
@@ -42,10 +52,11 @@ passport.use('local', new LocalStrategy(
       return done(null, {
         username: "admin"
       });
+    } else {
+      return done(null, false, {
+        message: 'Login, password incorrect'
+      });
     }
-    return done(null, false, {
-      message: 'Неверный логин или пароль'
-    });
   }
 ));
 passport.serializeUser(function (user, done) {
@@ -63,7 +74,7 @@ function ensureAuth(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
   } else {
-    console.log('результат аутентификации ' + req.isAuthenticated());
+    console.log('isAuthenticated: ' + req.isAuthenticated());
     res.render('login');
   }
 }
@@ -90,23 +101,18 @@ app.post('/API_LINK',
 
     passport.authenticate('local', function(err, username, info) {
 
-      console.log('err: '+err+'; username: '+username+'; info: '+info+';');
+      console.log('err: ' + err + '; username: ' + username + '; info: ' + info + ';');
 
       if (err) {
-        console.log('ошибочка ' + err);
+        console.log('Passport auth error: ' + err);
         return next(err);
-      }
-      if (!req.body.username) {
-        console.log('не юзер');
-        return res.send('не юзер');
       }
       req.logIn(req.body.username, function(err) {
         if (err) {
-          console.log('ошибочка2 ' + err);
+          console.log('Passport login process error: ' + err);
           return next(err);
         }
-        console.log(' все путем!');
-        return res.send(' все путем!');
+        return res.send('Passport login process souccess');
       });
     })(req, res, next);
 
@@ -114,6 +120,7 @@ app.post('/API_LINK',
 );
 
 app.put('/read/:id', ensureAuth, read.write);
+app.post('/read', ensureAuth, read.write);
 app.delete('/read/:id', ensureAuth, read.delete);
 
 app.get('/getbook', ensureAuth, getBook.data);
@@ -143,23 +150,25 @@ app.use(function(req, res, next) {
     err.status = 404;
     next(err);
 });
+
 /// error handlers
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+  app.use(function(err, req, res, next) {
+    res.render('error', {
+      message: err.message,
+      error: err
     });
+  });
 }
+
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
 });
 module.exports = app;
