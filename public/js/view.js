@@ -1,6 +1,7 @@
 var Start = Backbone.View.extend({
   el: 'body',
   events: {
+    // Create new model to popup
     "click .addItem" : "addObject"
   },
   initialize: function() {
@@ -9,12 +10,13 @@ var Start = Backbone.View.extend({
     this.listenTo(this.collection, 'add', this.addOne);
   },
   addObject: function() {
-    var view = new AddItemView({collection:this.collection});
+    // Open empty popup
+    var view = new AddItemView({collection: this.collection});
     this.$el.append(view.render());
-
   },
+  // fill items in the row
   addOne: function(model) {
-    var view = new ItemView({model:model});
+    var view = new ItemView({model: model});
     this.$('.row').append(view.render());
   }
 });
@@ -25,6 +27,7 @@ var ItemView = Backbone.View.extend({
   className: 'col-lg-4 panel panel-info',
   events: {
     "click .btn-danger" : "destroy",
+    // Send model to Popup
     "click .btn-info" : "edit"
   },
   initialize: function() {
@@ -48,59 +51,50 @@ var ItemView = Backbone.View.extend({
   }
 });
 
-
 var AddItemView = Backbone.View.extend({
   tagName: 'div',
   events: {
     "click .close" : "destroy",
     "click .btn-close" : "destroy",
+    // Send model from popup to server
     "click .btn-primary" : "sendModel"
   },
   initialize: function() {
     this.template = _.template($('#popupAddModel').html());
-    if (!this.model) {
-      var s = [];
-      var hexDigits = "0123456789abcdef";
-      for (var i = 0; i < 36; i++) {
-        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-      }
-      s[14] = "4";
-      s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
-      s[8] = s[13] = s[18] = s[23] = "-";
-      var uuid = s.join("");
-      this.model = new Row({id: uuid});
-    }
     if (this.collection) {
-    this.collection.add(this.model);
+      this.collection.add(this.model);
     }
   },
   render: function() {
-    var dataJson = this.model.toJSON();
-    var makeUp = this.template(dataJson);
+    if(this.model){
+      var dataJson = this.model.toJSON();
+      var makeUp = this.template(dataJson);
+    } else {
+      this.model = new Row({id: null});
+      var dataJson = this.model.toJSON();
+      var makeUp = this.template(dataJson);
+    }
     this.$el.html(makeUp);
     return this.$el;
   },
   destroy: function () {
     if (this.collection) {
-    this.model.destroy();
+      this.collection.remove(this.model);
     }
     this.remove();
   },
   sendModel: function() {
-    var nameOfItem = this.$el.find('#nameOfItem').val();
-    var subscr = this.$el.find('#subscr').val();
-    var price = this.$el.find('#price').val();
-    var picture = this.$el.find('#imgItem').val();
     this.model.set({
-      name: nameOfItem,
-      descr: subscr,
-      price: price,
-      picture: picture
+      name: this.$el.find('#nameOfItem').val(),
+      descr: this.$el.find('#subscr').val(),
+      price: this.$el.find('#price').val(),
+      picture: this.$el.find('#imgItem').val()
     });
-    if (this.collection) {
-    this.collection.create(this.model);
+    if (!this.model.attributes.id) {
+      this.collection.create(this.model);
+    } else {
+      this.model.save();
     }
-    this.model.save();
     this.remove();
   }
 });

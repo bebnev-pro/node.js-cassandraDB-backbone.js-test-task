@@ -1,4 +1,5 @@
 .idea
 .DS_Store
+bin/*.db
 .~lock.Back-end Trial Task - Saritasa VN - Version 1.odt#
 node_modules

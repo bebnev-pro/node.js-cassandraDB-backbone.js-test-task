@@ -1,30 +1,23 @@
-exports.data = function(req, res){
-  var fs = require('fs');
-  var file = './temp/pageResources/price.json';
-  var cql = require('node-cassandra-cql');
-  var client = new cql.Client({hosts: ['127.0.0.1'], keyspace: 'apitest', username: 'cassandra', password: 'cassandra'});
-  var consistency = cql.types.consistencies.one;
+var fs = require('fs');
+var file = './temp/pageResources/price.json';
+const sqlite3 = require('sqlite3').verbose();
 
+exports.data = function(req, res) {
+
+  let db = new sqlite3.Database('./bin/sample.db');
   fs.readFile(file, 'utf8', function (err, stream) {
     if (err) {
-      console.log('ошибка чтения файла json: ' + err);
+      console.log('Error during fs read json: ' + err);
     } else {
-
       var templateData = JSON.parse(stream);
       templateData.forEach(function (item) {
-        client.execute('INSERT INTO books (id, descr, name, picture, price) VALUES (blobAsUuid(timeuuidAsBlob(now())), ?,?,?,?)', [item.desc, item.name, item.picture, item.price], consistency,
-          function (err, result) {
-            if (err) {
-              console.log('плохо записалось в базу ошибка: ' + err);
-              throw err;
-            }
-            else {
-              console.log('строка с ключом ' + item.id + ' записана успешно');
-            }
-          });
+        db.run(`INSERT INTO books(Descr, Name, Picture, Price) VALUES(?, ?, ?, ?)`, [item.desc, item.name, item.picture, item.price], function(err) {
+          if (err) {return console.log(err);}
+        });
       });
+      db.close();
       res.redirect('/');
     }
   });
-
+  
 };

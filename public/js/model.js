@@ -2,9 +2,9 @@ var Row = Backbone.Model.extend({
   idAttribute: "id",
   defaults:{
     descr : "",
-    name : "new created model on client",
+    name : "New",
     picture : "",
-    price : 10
+    price : 0
   }
 });
 var RowsCollection = Backbone.Collection.extend({
