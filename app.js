@@ -23,13 +23,8 @@ db.close();
 
 //routes
 var base = require('./routes/base');
-var addrow = require('./routes/addrow');
 var index = require('./routes/index');
-var addrowBase = require('./routes/addrowBase');
-var getBook = require('./routes/getBook');
-var deleteBook = require('./routes/deleteBook');
 var login = require('./routes/login');
-var page = require('./routes/page');
 var read = require('./routes/read');
 //restfull
 
@@ -86,9 +81,7 @@ app.get('/', ensureAuth, function(req, res) {
   var file = fs.readFileSync('public/inde.html', 'utf8');
   res.send(file);
 });
-app.get('/page', page.data);
 app.get('/base', base.data);
-app.get('/addrow', ensureAuth, addrow.data);
 
 app.get('/read', ensureAuth, read.data);
 
@@ -123,8 +116,6 @@ app.put('/read/:id', ensureAuth, read.write);
 app.post('/read', ensureAuth, read.write);
 app.delete('/read/:id', ensureAuth, read.delete);
 
-app.get('/getbook', ensureAuth, getBook.data);
-app.get('/deleteBook', ensureAuth, deleteBook.data);
 app.get('/logout', function(req, res){
   req.logOut();
   res.redirect('/');
@@ -142,7 +133,6 @@ app.get('/login', function (req, res) {
 app.post('/login', passport.authenticate('local', { successRedirect: '/',
   failureRedirect: '/login' }));
 
-app.post('/addrow', addrowBase.data);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
