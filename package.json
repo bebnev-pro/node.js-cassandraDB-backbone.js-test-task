@@ -10,7 +10,7 @@
     "connect-flash": "*",
     "cookie-parser": "~1.0.1",
     "ejs": "*",
-    "express": "~3.4.8",
+    "express": "~3.11.0",
     "node-cassandra-cql": "*",
     "passport": "*",
     "passport-local": "*",
